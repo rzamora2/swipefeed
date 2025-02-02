@@ -7,7 +7,7 @@ export default function BottomNav() {
         <li>
           <button className="flex flex-col items-center pointer-events-auto">
             <Home className="w-6 h-6" />
-            <span className="text-xs mt-1">Home</span>
+            <span className="text-xs mt-1">Home Page</span>
           </button>
         </li>
         <li>
