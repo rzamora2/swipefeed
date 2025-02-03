@@ -6,10 +6,6 @@ import { useRouter } from "next/navigation";
 export default function BottomNav() {
   const router = useRouter();
 
-  const handleUploadClick = () => {
-    console.log("Upload button clicked"); // Debugging log
-    router.push("/upload"); // Navigate to the Upload Video Page
-  };
   const handleHomePageClick = () => {
     console.log("HomePage button clicked"); // Debugging log
     router.push("/"); // Navigate to the HomePage
@@ -34,10 +30,7 @@ export default function BottomNav() {
           </button>
         </li>
         <li>
-          <button
-            className="flex flex-col items-center pointer-events-auto"
-            // onClick={handleUploadClick} // Handle click event
-          >
+          <button className="flex flex-col items-center pointer-events-auto">
             <PlusSquare className="w-8 h-8" />
           </button>
         </li>

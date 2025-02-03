@@ -10,11 +10,7 @@ interface Video {
   // Add other properties as needed
 }
 
-interface VideoFeedProps {
-  currentVideoId: number; // or string, depending on your video ID type
-}
-
-const VideoFeed: React.FC<VideoFeedProps> = ({ currentVideoId }) => {
+const VideoFeed: React.FC = () => {
   const [videos, setVideos] = useState<Video[]>([]);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const supabase = getSupabaseClient(); // Initialize the Supabase client
@@ -38,7 +34,7 @@ const VideoFeed: React.FC<VideoFeedProps> = ({ currentVideoId }) => {
         if (data.length === 0) {
           console.warn("No videos found in the database.");
         }
-        const videoData = data.map((video: any) => ({
+        const videoData = data.map((video: Video) => ({
           id: video.id,
           file_url: video.file_url, // Ensure this matches the column name in your database
           // username: video.username,
