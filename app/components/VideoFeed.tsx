@@ -1,19 +1,21 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { getSupabaseClient } from "../utils/supabase/client"; // Adjust the import path as needed
-import VideoPlayer from "./VideoPlayer"; // Adjust the import path as needed
+import React, { useEffect, useState, useRef } from "react";
+import VideoPlayer from "./VideoPlayer";
+import { getSupabaseClient } from "../utils/supabase/client";
 
 interface Video {
-  id: string; // Updated to string to handle UUIDs
-  url: string;
-  // username: string;
-  // description: string;
+  id: string; // or number, depending on your video ID type
+  file_url: string;
+  // Add other properties as needed
 }
 
-export default function VideoFeed() {
+interface VideoFeedProps {
+  currentVideoId: number; // or string, depending on your video ID type
+}
+
+const VideoFeed: React.FC<VideoFeedProps> = ({ currentVideoId }) => {
   const [videos, setVideos] = useState<Video[]>([]);
-  const feedRef = useRef<HTMLDivElement>(null);
   const observerRef = useRef<IntersectionObserver | null>(null);
   const supabase = getSupabaseClient(); // Initialize the Supabase client
 
@@ -38,10 +40,11 @@ export default function VideoFeed() {
         }
         const videoData = data.map((video: any) => ({
           id: video.id,
-          url: video.url, // Adjust based on your Supabase storage setup
+          file_url: video.file_url, // Ensure this matches the column name in your database
           // username: video.username,
           // description: video.description,
         }));
+        console.log("Video data:", videoData); // Debugging log
         setVideos(videoData);
       }
     };
@@ -69,11 +72,13 @@ export default function VideoFeed() {
     };
 
     observerRef.current = new IntersectionObserver(handleIntersection, {
-      threshold: 0.5, // Adjust the threshold as needed
+      threshold: 0.5,
     });
 
-    const videos = feedRef.current?.querySelectorAll("video");
-    videos?.forEach((video) => observerRef.current?.observe(video));
+    const videoElements = document.querySelectorAll("video");
+    videoElements.forEach((video) => {
+      observerRef.current?.observe(video);
+    });
 
     return () => {
       observerRef.current?.disconnect();
@@ -81,10 +86,7 @@ export default function VideoFeed() {
   }, [videos]);
 
   return (
-    <div
-      ref={feedRef}
-      className="w-full h-screen overflow-y-scroll snap-y snap-mandatory"
-    >
+    <div className="w-full h-screen overflow-y-scroll snap-y snap-mandatory">
       {videos.map((video) => (
         <div
           key={video.id}
@@ -95,4 +97,6 @@ export default function VideoFeed() {
       ))}
     </div>
   );
-}
+};
+
+export default VideoFeed;
